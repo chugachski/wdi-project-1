@@ -96,6 +96,15 @@ player picks [6,3] / 6 of diamonds
         invalid pick
 
 
+remove from hand, add to top shuffled deck
+get a number corresponding to the index in hand
+check to see if the rank at that index is 8
+if it isn't,
+
+
+
+
+
 ### Questions ###
 1. should I eliminate the gameplay array and just draw from the deck array?
 2. svg

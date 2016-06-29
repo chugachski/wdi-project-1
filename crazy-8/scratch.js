@@ -183,19 +183,77 @@ fisherYates: function (unshuffled) {
 
 
 
+switch (expression) {
+  case value1:
+    //Statements executed when the result of expression matches value1
+    [break;]
+  case value2:
+    //Statements executed when the result of expression matches value2
+    [break;]
+  ...
+  case valueN:
+    //Statements executed when the result of expression matches valueN
+    [break;]
+  default:
+    //Statements executed when none of the values match the value of the expression
+    [break;]
+}
 
 
+playerAction: 0,1,2,3,4,5,6,7,8
+var i;
+switch (playerAction) {
+  case 0:
+  i = 0;
+  this.shuffledDeck.unshift(this.playerHand.splice(i, 1));
+  this.setCurrent(false);
+    break;
+  case 1:
+    code
+    break;
+  case 2:
+    code
+    break;
+  case 3:
+    code
+    break;
+  case 4:
+    code
+    break;
+  case 5:
+    code
+    break;
+  case 6:
+    code
+    break;
+  case 7:
+    code
+    break;
+  default:
+    code
+    break;
+}
 
 
+function createDeck(){
+  var ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  var suits = ["C", "D", "H", "S"];
+  var deck = [];
 
+  for (var r=0; r<ranks.length; r++){ // runs 13 times
+    for (var s=0; s<suits.length; s++){ // runs 4 times
+      var pair = {rank: ranks[r], suit: suits[s]};
+      deck.push(pair);
+    }
+  }
 
+  // for(i=0; i<52; i++){
+  //   console.log(this.deck[i]);
+  // }
 
-
-
-
-
-
-
+  return deck;
+}
+createDeck();
 
 
 
