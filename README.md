@@ -7,6 +7,9 @@ github url
 description of crazy 8's
 ### Technology Used:
 description of tech
+### Citation:
+based fisher yates shuffle function on code from:
+http://sedition.com/perl/javascript-fy.html
 
 ## Pig:
 ### Link
