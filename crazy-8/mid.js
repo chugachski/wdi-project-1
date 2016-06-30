@@ -11,7 +11,6 @@
     dealerHand: [],
     dealerHandStr: '',
     shuffledDeck: [],
-    discardPile: [],
     createDeck: function(){
       var ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
       var suits = ["C", "D", "H", "S"];
@@ -45,7 +44,7 @@
     startGame: function(){
       console.log('playing crazy 8\'s!');
       console.log('creating a deck...');
-      this.shuffledDeck = this.fisherYates(this.createDeck()); // shuffle cards
+      this.shuffledDeck = this.fisherYates(this.createDeck()); // shuffle all cards
 
       // for (i=0; i<52; i++){
       //   console.log(this.shuffledDeck[i]);
@@ -54,27 +53,21 @@
       this.playerHand = this.shuffledDeck.splice(0, 8); // deal hands
       this.dealerHand = this.shuffledDeck.splice(8, 8); // deal hands
 
+      // console.log(`playerHand: ${this.playerHand.length}, dealerHand: ${this.dealerHand.length}, shuffledDeck: ${this.shuffledDeck.length}`);
+
       console.log(this.turn + ', it\'s your turn!');
       this.gamePlay(this.turn);
     },
-    endGame: function(winner) {
-      alert(`${winner} has won!`);
-    },
     setCurrent: function(override, chosenSuit) { // call after every play
       if (override) {
-        this.currentRank = this.discardPile[0].rank;
-        this.currentSuit = chosenSuit;
-      } else if (this.discardPile.length === 0) {
         this.currentRank = this.shuffledDeck[0].rank;
-        this.currentSuit = this.shuffledDeck[0].suit
+        this.currentSuit = chosenSuit;
       } else {
-        this.currentRank = this.discardPile[0].rank;
-        this.currentSuit = this.discardPile[0].suit;
+        this.currentRank = this.shuffledDeck[0].rank;
+        this.currentSuit = this.shuffledDeck[0].suit;
       }
     },
     render: function(turn) {
-      this.playerHandStr = ' ';
-      this.dealerHandStr = ' ';
       if (turn === 'Player') {
         for (i=0; i<this.playerHand.length; i++) {
           this.playerHandStr += `[${this.playerHand[i].rank}${this.playerHand[i].suit}]  `
@@ -87,29 +80,20 @@
       console.log(`[${this.currentRank}${this.currentSuit}] is on top.`);
     },
     gamePlay: function(turn) {
-      console.log(`playerHand: ${this.playerHand.length}, dealerHand: ${this.dealerHand.length}, shuffledDeck: ${this.shuffledDeck.length}, discardPile: ${this.discardPile.length}`);
-
       this.setCurrent(false);
       this.render(this.turn);
 
       if (turn === 'Player') {
-        var i = prompt(`Your current hand: ${this.playerHandStr}. What index card do you want to play?`);
+        var i = prompt(`Your current hand: ${this.playerHandStr}. What index card do you want to play?`).toLowerCase();
         console.log(`Player chose [${i}]`);
       } else {
-        var j = prompt(`Your current hand: ${this.dealerHandStr}. What index card do you want to play?`);
-        console.log(`Dealer chose [${j}]`);
+        var i = prompt(`Your current hand: ${this.dealerHandStr}. What index card do you want to play?`).toLowerCase();
+        console.log(`Dealer chose [${i}]`);
       }
 
-      if (this.turn === 'Player') {
-        var removed = this.playerHand.splice(i, 1);
-        this.discardPile.push(removed[0]);
-       // remove from hand, add to discar pile
-      } else {
-        var removed = this.dealerHand.splice(i, 1);
-        this.discardPile.push(removed[0]);
-        // remove from hand, add to top of shuffled deck
-      }
-
+      var removed = this.playerHand.splice(i, 1);
+      this.shuffledDeck.unshift(removed[0]);
+       // remove from hand, add to top of shuffled deck
 
       this.setCurrent(false);
 
@@ -118,20 +102,28 @@
       }
       console.log('currentRank: ' + this.currentRank + ' currentSuit: ' + this.currentSuit);
 
-      console.log(`cards in player hand: ${this.playerHand.length}, cards in dealer hand: ${this.dealerHand.length}`);
-      if (this.playerHand.length > 0 && this.dealerHand.length > 0) { // play
-        this.altTurn(this.participants); // switch turns
-        console.log(this.turn + ', it\'s your turn!');
+      this.altTurn(this.participants); // switch turns
+      console.log(this.turn + ', it\'s your turn!')
+      this.render(this.turn);
 
-        this.render(this.turn);
-        this.gamePlay(this.turn); // recursive call
-      } else {
-        this.endGame(this.turn);
-      }
+
+
+
+
+
+
     }
-  } // end of Game object
+
+
+
+
+  }
 
   console.log("type Game.startGame(); to begin playing");
+
+
+
+
 
 
 
@@ -141,3 +133,6 @@
 
 
 
+
+
+// });

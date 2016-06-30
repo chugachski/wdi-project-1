@@ -1,1 +1,48 @@
-/* wait till the end! */
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+div {
+  width: 100px;
+  height: 180px;
+  margin: 5px;
+  border-radius: 15px;
+}
+
+.p-hand {
+  background: lightblue;
+}
+
+.d-hand {
+  background: lightpink;
+}
+
+
+#face-down {
+  background: darkblue;
+  color: lightgrey;
+  margin-left: 200px;
+}
+
+#current-card {
+  background: lightgrey;
+  margin-right: 200px;
+}
+
+.button {
+  margin: 80px;
+  background: teal;
+  border: none;
+  border-radius: 5px;
+}
+
+h1 {
+  text-align: center;
+}
+
+
+
+
+

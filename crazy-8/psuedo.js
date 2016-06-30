@@ -2,6 +2,15 @@
 
 /*
 
+### TO DO ###
+1. create discard deck
+2. create 'draw' fn
+3. call on draw fn when no valid card exists
+4. verify play is valid (optional)
+
+
+
+
 ### RULES ###
 
 Eight cards are dealt to each player. The remaining cards of the deck are placed face down at the center of the table. The top card is then turned face up to start the game.
@@ -111,4 +120,6 @@ if it isn't,
 
 array of suits (4)
 spritesheet
+
+
 */

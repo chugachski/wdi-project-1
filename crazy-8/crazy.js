@@ -1,7 +1,14 @@
 // document.addEventListener('DOMContentLoaded', function(){
   console.log('crazy.js loaded');
 
+
+
+
+
   var Game = {
+    ph: document.querySelector('#p-side'),
+    dh: document.querySelector('#d-side'),
+    onTop: document.querySelector('#current-card'),
     currentRank: null,
     currentSuit: null,
     participants: ['Player', 'Dealer'],
@@ -11,6 +18,7 @@
     dealerHand: [],
     dealerHandStr: '',
     shuffledDeck: [],
+    discardPile: [],
     createDeck: function(){
       var ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
       var suits = ["C", "D", "H", "S"];
@@ -29,7 +37,7 @@
       this.turn = array[0];
       return this.turn
     },
-    fisherYates: function (cardsArr) {
+    fisherYates: function(cardsArr) {
       var i = cardsArr.length;
       if ( i === 0 ) return false;
       while ( --i ) {
@@ -41,10 +49,14 @@
        }
        return cardsArr;
     },
+    // dealCard: function(hand) {
+    //   var card = this.shuffledDeck.splice(0, 1);
+    //   this.hand.push(card);
+    // },
     startGame: function(){
       console.log('playing crazy 8\'s!');
       console.log('creating a deck...');
-      this.shuffledDeck = this.fisherYates(this.createDeck()); // shuffle all cards
+      this.shuffledDeck = this.fisherYates(this.createDeck()); // shuffle cards
 
       // for (i=0; i<52; i++){
       //   console.log(this.shuffledDeck[i]);
@@ -53,10 +65,19 @@
       this.playerHand = this.shuffledDeck.splice(0, 8); // deal hands
       this.dealerHand = this.shuffledDeck.splice(8, 8); // deal hands
 
-      // console.log(`playerHand: ${this.playerHand.length}, dealerHand: ${this.dealerHand.length}, shuffledDeck: ${this.shuffledDeck.length}`);
+      for(var i=0; i<this.ph.children.length; i++) {
+        this.ph.children[i].innerText = this.playerHand[i].rank + this.playerHand[i].suit;
+      }
+
+      for(var i=0; i<this.dh.children.length; i++) {
+        this.dh.children[i].innerText = this.dealerHand[i].rank + this.dealerHand[i].suit;
+      }
 
       console.log(this.turn + ', it\'s your turn!');
       this.gamePlay(this.turn);
+    },
+    endGame: function(winner) {
+      alert(`${winner} has won!`);
     },
     setCurrent: function(override, chosenSuit) { // call after every play
       if (override) {
@@ -68,6 +89,8 @@
       }
     },
     render: function(turn) {
+      this.playerHandStr = ' ';
+      this.dealerHandStr = ' ';
       if (turn === 'Player') {
         for (i=0; i<this.playerHand.length; i++) {
           this.playerHandStr += `[${this.playerHand[i].rank}${this.playerHand[i].suit}]  `
@@ -77,61 +100,56 @@
           this.dealerHandStr += `[${this.dealerHand[i].rank}${this.dealerHand[i].suit}]  `
         }
       }
-      console.log(`[${this.currentRank}${this.currentSuit}] is on top.`);
+
     },
     gamePlay: function(turn) {
+      console.log(`playerHand: ${this.playerHand.length}, dealerHand: ${this.dealerHand.length}, shuffledDeck: ${this.shuffledDeck.length} `);
+
       this.setCurrent(false);
       this.render(this.turn);
 
       if (turn === 'Player') {
-        var i = prompt(`Your current hand: ${this.playerHandStr}. What index card do you want to play?`).toLowerCase();
+        this.onTop.innerText = this.currentRank + this.currentSuit;
+        var i = prompt(`On top: [${this.currentRank}${this.currentSuit}]\nYour current hand: ${this.playerHandStr}\nWhat card do you want to play (index)?`);
         console.log(`Player chose [${i}]`);
       } else {
-        var i = prompt(`Your current hand: ${this.dealerHandStr}. What index card do you want to play?`).toLowerCase();
+        this.onTop.innerText = this.currentRank + this.currentSuit;
+        var i = prompt(`On top: [${this.currentRank}${this.currentSuit}]\nYour current hand: ${this.dealerHandStr}\nWhat card do you want to play (index)?`);
         console.log(`Dealer chose [${i}]`);
       }
 
-      var removed = this.playerHand.splice(i, 1);
-      this.shuffledDeck.unshift(removed[0]);
+      if (this.turn === 'Player') {
+        var removed = this.playerHand.splice(i, 1);
+        this.shuffledDeck.unshift(removed[0]);
        // remove from hand, add to top of shuffled deck
+      } else {
+        var removed = this.dealerHand.splice(i, 1);
+        this.shuffledDeck.unshift(removed[0]);
+        // remove from hand, add to top of shuffled deck
+      }
+
 
       this.setCurrent(false);
 
       if (this.currentRank == 8) {
         this.setCurrent(true, prompt('What suit do you want (c/d/h/s)?').toUpperCase());
       }
-      console.log('currentRank: ' + this.currentRank + ' currentSuit: ' + this.currentSuit);
 
-      this.altTurn(this.participants); // switch turns
-      console.log(this.turn + ', it\'s your turn!')
-      this.render(this.turn);
+      console.log(`cards in player hand: ${this.playerHand.length}, cards in dealer hand: ${this.dealerHand.length}`);
+      console.log(`[${this.currentRank}${this.currentSuit}] is on top.`);
+      if (this.playerHand.length > 0 && this.dealerHand.length > 0) { // play
+        this.altTurn(this.participants); // switch turns
+        console.log(this.turn + ', it\'s your turn!');
 
-
-      // this.gamePlay(this.turn);
-
-
-
-
+        this.render(this.turn);
+        this.gamePlay(this.turn); // recursive call
+      } else {
+        this.endGame(this.turn);
+      }
     }
-
-
-
-
-  }
+  } // end of Game object
 
   console.log("type Game.startGame(); to begin playing");
-
-
-
-
-
-
-
-// });
-
-
-
-
 
 
 
