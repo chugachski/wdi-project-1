@@ -1,3 +1,7 @@
+body {
+  font-size: 20px;
+}
+
 section {
   display: flex;
   flex-wrap: wrap;
@@ -5,10 +9,11 @@ section {
 }
 
 div {
-  width: 100px;
-  height: 180px;
+  width: 90px;
+  height: 160px;
   margin: 5px;
   border-radius: 10px;
+  padding: 10px;
 }
 
 .b-hand {
@@ -32,14 +37,15 @@ div {
 }
 
 #turn {
-  margin: 0 auto;
+  margin: 20px auto;
   background: lightgrey;
-  width: 160px;
+  width: 190px;
   height: 40px;
+  text-align: center;
 }
 
 .button {
-  margin: 75px;
+  margin: 70px;
   background: teal;
   border: none;
   border-radius: 5px;
@@ -47,6 +53,7 @@ div {
 
 h1 {
   text-align: center;
+  font-size: 32px;
 }
 
 

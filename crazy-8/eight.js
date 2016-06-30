@@ -13,6 +13,7 @@ rh4 = document.querySelector('#r-4'),
 rh5 = document.querySelector('#r-5'),
 rh6 = document.querySelector('#r-6'),
 rh7 = document.querySelector('#r-7'),
+rh8 = document.querySelector('#r-8'),
 bh0 = document.querySelector('#b-0'),
 bh1 = document.querySelector('#b-1'),
 bh2 = document.querySelector('#b-2'),
@@ -21,16 +22,22 @@ bh4 = document.querySelector('#b-4'),
 bh5 = document.querySelector('#b-5'),
 bh6 = document.querySelector('#b-6'),
 bh7 = document.querySelector('#b-7'),
+bh8 = document.querySelector('#b-8'),
+
+
+draw = document.querySelector('#face-down')
 
 currentRank = null,
 currentSuit = null,
-participants = ['red', 'blue'],
-turn = 'red',
+participants = ['Red', 'Blue'],
+turn = 'Red',
 blueHand = [],
 redHand = [],
 shuffledDeck = [],
 discardPile = [],
-topCard = [];
+topCard = [],
+drawnCountRed = 0;
+drawnCountBlue = 0;
 
 function createDeck() {
   var ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -176,8 +183,56 @@ function playCard(whosHand, index, domEl) {
   onTop.innerText = topCard[0].rank + topCard[0].suit // b/c we used splice
   domEl.innerText = 'X'; // replace rank and suit with 'x'
   altTurn(participants); // switch players
-  dispTurn.innerText = `${turn}, it\'s your turn!` // change display
+  dispTurn.innerText = `${turn}, it\'s your turn!` // change displayed turn
 }
+
+function drawCardRed() {
+
+  redHand.push(dealCard(shuffledDeck));
+  var newCard = document.createElement('div');
+  newCard.classList.add('r-hand');
+  newCard.id = `r-${8+drawnCountRed}`;
+  rh.appendChild(newCard);
+  newCard.innerText = redHand[8+drawnCountRed].rank + redHand[8+drawnCountRed].suit;
+  drawnCountRed += 1;
+
+  // newCard.addEventListener('click', function(){
+  //   playCard(redHand, 8+drawnCountRed, rh8);
+  // })
+
+  altTurn(participants);
+  dispTurn.innerText = `${turn}, it\'s your turn!`;
+}
+
+function drawCardBlue() {
+
+  blueHand.push(dealCard(shuffledDeck));
+  var newCard = document.createElement('div');
+  newCard.classList.add('b-hand');
+  newCard.id = `b-${8+drawnCountBlue}`;
+  bh.appendChild(newCard);
+  newCard.innerText = blueHand[8+drawnCountBlue].rank + blueHand[8+drawnCountBlue].suit;
+  drawnCountBlue += 1;
+
+  // newCard.addEventListener('click', function(){
+  //   playCard(blueHand, 8+drawnCountBlue, bh8);
+  // })
+
+  altTurn(participants);
+  dispTurn.innerText = `${turn}, it\'s your turn!`;
+}
+
+draw.addEventListener('click', function() {
+  console.log('You clicked on draw');
+  if (turn === 'Red') {
+      drawCardRed();
+  } else if (turn === 'Blue') {
+      drawCardBlue();
+  }
+})
+
+
+
 
 
 
