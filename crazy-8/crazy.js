@@ -1,17 +1,17 @@
 console.log('crazy.js loaded');
 
 var Game = {
-  ph: document.querySelector('#p-side'),
-  dh: document.querySelector('#d-side'),
+  rh: document.querySelector('#r-side'),
+  bh: document.querySelector('#b-side'),
   onTop: document.querySelector('#current-card'),
-  faceD: document.querySelector('#face-down'),
   dispTurn: document.querySelector('#turn'),
-
+  faceDn: document.querySelector('#face-down'),
+  r1: document.querySelector('#r-1'),
 
   currentRank: null,
   currentSuit: null,
-  participants: ['Player', 'Dealer'],
-  turn: 'Player',
+  participants: ['red', 'blue'],
+  turn: 'red',
   blueHand: [],
   playerHandStr: '',
   redHand: [],
@@ -54,17 +54,18 @@ var Game = {
     var card = array.pop();
     return card;
   },
-  startGame: function(){
+  startGame: function() { // preps the game board
     this.shuffledDeck = this.fisherYates(this.createDeck()); // shuffle cards
 
     for (var i=0; i<8; i++) { // deal cards and display
       this.blueHand.push(this.dealCard(this.shuffledDeck));
       this.redHand.push(this.dealCard(this.shuffledDeck));
     }
+    console.log('redhand: ', this.redHand[0]);
 
-    for (var i=0; i<this.ph.children.length; i++) { // add to DOM
-      this.ph.children[i].innerText = this.blueHand[i].rank + this.blueHand[i].suit;
-      this.dh.children[i].innerText = this.redHand[i].rank + this.redHand[i].suit;
+    for (var i=0; i<8; i++) { // add to DOM
+      this.rh.children[i].innerText = this.redHand[i].rank + this.redHand[i].suit;
+      this.bh.children[i].innerText = this.blueHand[i].rank + this.blueHand[i].suit;
     }
 
     this.topCard.push(this.dealCard(this.shuffledDeck)); // deal a card into topCard array
@@ -84,54 +85,35 @@ var Game = {
       this.currentRank = this.topCard[0].rank;
       this.currentSuit = this.topCard[0].suit;
     }
-
   },
-  gamePlay: function(turn) {
-    console.log(`playerHand: ${this.playerHand.length}, dealerHand: ${this.dealerHand.length}, shuffledDeck: ${this.shuffledDeck.length} `);
-
-    this.faceD.addEventListener('click', function(){
-      this.turn === 'Player' ? this.dealCard(this.playerHand) : this.dealCard(this.dealerHand);
+  drawCard: function(turn){
+    this.faceDn.addEventListener('click', function() {
+      if (turn === 'red') {
+        console.log('clicked');
+        this.redHand.push(this.dealCard(this.shuffledDeck));
+      } else if (turn === 'blue') {
+        this.blueHand.push(this.dealCard(this.shuffledDeck));
+      }
+    });
+  },
+  playCard: function() {
+    this.r1.addEventListener('click', function(){
+      console.log('r1 clicked');
+      this.topCard.unshift(this.redHand.splice(0,1));
     })
+  },
+  gamePlay: function() {
+    console.log(`redHand: ${this.redHand.length}, blueHand: ${this.blueHand.length}, shuffledDeck: ${this.shuffledDeck.length} turn: ${this.turn} `);
 
-    // also add event listeners for cards in player/dealer hands and shift them as necessary
-    // probably need one for each card
-    this.ph1.addEventListener('click', function(){
-      // remove that card from hand
-      // add to discard pile
-      // hide the card background
-    })
+    this.playCard();
 
-    if (this.turn === 'Player') {
-      var removed = this.playerHand.splice(i, 1);
-      this.shuffledDeck.unshift(removed[0]);
-     // remove from hand, add to top of shuffled deck
-    } else {
-      var removed = this.dealerHand.splice(i, 1);
-      this.shuffledDeck.unshift(removed[0]);
-      // remove from hand, add to top of shuffled deck
-    }
-
-    this.setCurrent(false);
-
-    if (this.currentRank == 8) {
-      this.setCurrent(true, prompt('What suit do you want (c/d/h/s)?').toUpperCase());
-    }
-
-    console.log(`cards in player hand: ${this.playerHand.length}, cards in dealer hand: ${this.dealerHand.length}`);
-    console.log(`[${this.currentRank}${this.currentSuit}] is on top.`);
-    if (this.playerHand.length > 0 && this.dealerHand.length > 0) { // play
-      this.altTurn(this.participants); // switch turns
-      console.log(this.turn + ', it\'s your turn!');
-
-      this.render(this.turn);
-      this.gamePlay(this.turn); // recursive call
-    } else {
-      this.endGame(this.turn);
-    }
   }
+
 } // end of Game object
 
 var btn = document.querySelector('#deal');
 btn.addEventListener('click', function(){
   Game.startGame();
 });
+
+
