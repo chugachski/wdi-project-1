@@ -8,17 +8,17 @@ div {
   width: 100px;
   height: 180px;
   margin: 5px;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .p-hand {
   background: lightblue;
+  margin-top: 20px;
 }
 
 .d-hand {
   background: lightpink;
 }
-
 
 #face-down {
   background: darkblue;
@@ -31,8 +31,15 @@ div {
   margin-right: 200px;
 }
 
+#turn {
+  margin: 0 auto;
+  background: lightgrey;
+  width: 160px;
+  height: 40px;
+}
+
 .button {
-  margin: 80px;
+  margin: 75px;
   background: teal;
   border: none;
   border-radius: 5px;

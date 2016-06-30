@@ -62,14 +62,11 @@
     },
     setCurrent: function(override, chosenSuit) { // call after every play
       if (override) {
-        this.currentRank = this.discardPile[0].rank;
-        this.currentSuit = chosenSuit;
-      } else if (this.discardPile.length === 0) {
         this.currentRank = this.shuffledDeck[0].rank;
-        this.currentSuit = this.shuffledDeck[0].suit
+        this.currentSuit = chosenSuit;
       } else {
-        this.currentRank = this.discardPile[0].rank;
-        this.currentSuit = this.discardPile[0].suit;
+        this.currentRank = this.shuffledDeck[0].rank;
+        this.currentSuit = this.shuffledDeck[0].suit;
       }
     },
     render: function(turn) {
@@ -87,36 +84,32 @@
       console.log(`[${this.currentRank}${this.currentSuit}] is on top.`);
     },
     gamePlay: function(turn) {
-      console.log(`playerHand: ${this.playerHand.length}, dealerHand: ${this.dealerHand.length}, shuffledDeck: ${this.shuffledDeck.length}, discardPile: ${this.discardPile.length}`);
-
       this.setCurrent(false);
       this.render(this.turn);
 
       if (turn === 'Player') {
-        var i = prompt(`Your current hand: ${this.playerHandStr}. What index card do you want to play?`);
+        var i = prompt(`[${this.currentRank}${this.currentSuit}] is on top\nYour current hand: ${this.playerHandStr}\nWhat index card do you want to play?`);
         console.log(`Player chose [${i}]`);
       } else {
-        var j = prompt(`Your current hand: ${this.dealerHandStr}. What index card do you want to play?`);
-        console.log(`Dealer chose [${j}]`);
+        var i = prompt(`[${this.currentRank}${this.currentSuit}] is on top\nYour current hand: ${this.dealerHandStr}\nWhat index card do you want to play?`);
+        console.log(`Dealer chose [${i}]`);
       }
 
       if (this.turn === 'Player') {
         var removed = this.playerHand.splice(i, 1);
-        this.discardPile.push(removed[0]);
-       // remove from hand, add to discar pile
+        this.shuffledDeck.unshift(removed[0]);
+       // remove from hand, add to top of shuffled deck
       } else {
-        var removed = this.dealerHand.splice(i, 1);
-        this.discardPile.push(removed[0]);
+        var removed = this.shuffledDeck.splice(i, 1);
+        this.shuffledDeck.unshift(removed[0]);
         // remove from hand, add to top of shuffled deck
       }
-
 
       this.setCurrent(false);
 
       if (this.currentRank == 8) {
         this.setCurrent(true, prompt('What suit do you want (c/d/h/s)?').toUpperCase());
       }
-      console.log('currentRank: ' + this.currentRank + ' currentSuit: ' + this.currentSuit);
 
       console.log(`cards in player hand: ${this.playerHand.length}, cards in dealer hand: ${this.dealerHand.length}`);
       if (this.playerHand.length > 0 && this.dealerHand.length > 0) { // play
