@@ -64,6 +64,12 @@ function dealCard(array) {
     return card;
   }
 
+function altTurn(array){
+    array.push(array.shift());
+    this.turn = array[0];
+    return this.turn
+  }
+
 function startGame() { // preps the game board
   shuffledDeck = fisherYates(createDeck()); // shuffle cards
 
@@ -165,18 +171,12 @@ function gamePlay() {
 
 function playCard(whosHand, index, domEl) {
   console.log("thing we'd like to remove: ", whosHand[index]);
-
-  var card = whosHand.splice(index, 1, 'liza'); // returns arr of the card
-
+  var card = whosHand.splice(index, 1, 'liza'); // returns arr of the card 'liza' is a placeholder to retain the order
   topCard.unshift(card[0]);
-  onTop.innerText = topCard[0].rank + topCard[0].suit
-
-  domEl.innerText = 'X';
-
-
-  // topCard.unshift(whosHand.splice(index,1));
-  // console.log('topcard: ', topCard);
-  // console.log('redhand: ', redHand, 'blueHand: ', blueHand);
+  onTop.innerText = topCard[0].rank + topCard[0].suit // b/c we used splice
+  domEl.innerText = 'X'; // replace rank and suit with 'x'
+  altTurn(participants); // switch players
+  dispTurn.innerText = `${turn}, it\'s your turn!` // change display
 }
 
 
