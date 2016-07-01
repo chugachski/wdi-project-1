@@ -1,5 +1,4 @@
 var btn = document.querySelector('#deal');
-
 rh = document.querySelector('#r-side'),
 bh = document.querySelector('#b-side'),
 onTop = document.querySelector('#current-card'),
@@ -23,12 +22,8 @@ bh5 = document.querySelector('#b-5'),
 bh6 = document.querySelector('#b-6'),
 bh7 = document.querySelector('#b-7'),
 bh8 = document.querySelector('#b-8'),
-
-
 draw = document.querySelector('#face-down')
 
-currentRank = null,
-currentSuit = null,
 participants = ['Red', 'Blue'],
 turn = 'Red',
 blueHand = [],
@@ -107,8 +102,6 @@ function startGame() { // preps the game board
 function gamePlay() {
   console.log(`redHand: ${redHand.length}, blueHand: ${blueHand.length}, shuffledDeck: ${shuffledDeck.length} turn: ${turn} `);
 
-
-
  // add event listeners to red cards
   rh0.addEventListener('click', function() {
     playCard(redHand, 0, rh0);
@@ -186,14 +179,11 @@ function playCard(whosHand, index, domEl) {
     console.log('hand not empty');
   }
 
-  endGame(includesObj());
-
   altTurn(participants); // switch players
   dispTurn.innerText = `${turn}, it\'s your turn!` // change displayed turn
 }
 
 function drawCardRed() {
-
   redHand.push(dealCard(shuffledDeck));
   var newCard = document.createElement('div');
   newCard.classList.add('r-hand');
@@ -202,16 +192,11 @@ function drawCardRed() {
   newCard.innerText = redHand[8+drawnCountRed].rank + redHand[8+drawnCountRed].suit;
   drawnCountRed += 1;
 
-  // newCard.addEventListener('click', function(){
-  //   playCard(redHand, 8+drawnCountRed, rh8);
-  // })
-
   altTurn(participants);
   dispTurn.innerText = `${turn}, it\'s your turn!`;
 }
 
 function drawCardBlue() {
-
   blueHand.push(dealCard(shuffledDeck));
   var newCard = document.createElement('div');
   newCard.classList.add('b-hand');
@@ -219,10 +204,6 @@ function drawCardBlue() {
   bh.appendChild(newCard);
   newCard.innerText = blueHand[8+drawnCountBlue].rank + blueHand[8+drawnCountBlue].suit;
   drawnCountBlue += 1;
-
-  // newCard.addEventListener('click', function(){
-  //   playCard(blueHand, 8+drawnCountBlue, bh8);
-  // })
 
   altTurn(participants);
   dispTurn.innerText = `${turn}, it\'s your turn!`;
@@ -240,7 +221,3 @@ draw.addEventListener('click', function() {
 btn.addEventListener('click', function(){
   startGame();
 });
-
-
-
-
