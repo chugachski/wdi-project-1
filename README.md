@@ -20,9 +20,9 @@ can draw from the stockpile until willing and able to play one of the above
 The game ends as soon as one player has emptied their hand.
 
 ### Technology Used:
--JavaScript
--HTMl
--CSS
+* JavaScript
+* HTMl
+* CSS
 
 ### How it works:
 My first major task was to create a deck of cards and organize the data. To accomplish this I constructed an array containing 52 objects by using nested for-loops. This way I can access a card by index and its rank and suit by property name. It also allows cards to be pushed, popped, spliced, etc. 
@@ -33,15 +33,13 @@ I used the DOM to add text to each div representing a card and added click handl
 
 If the player needs to draw a card, I used javascript and the DOM to create a new div and populate it with text representing the card that was drawn from the shuffled deck. However, I was unable to add event listeners that would allow that card to be played when clicked because of the way I wrote the previous code.
 
-Problems: Several objectives were not met:
-    1. logic does not verify that a play is valid-- you can cheat!
-    2. drawn cards cannot be played (see above)
-    3. I couldn't come up with any straighforward logic to tell if the game was over-- I can't check to see if a hand is empty, because when a card is spliced out, it gets replaced with a placeholder to retain the order so that cards display properly
-    4. The game can't be called 'Crazy Eights' in truth (although it did drive me crazy) because there is no logic to ask what suit to change to if an 8 is played. This logic was in a previous version that relied on prompts to collect information from the user but was unusable when I started to think about how it would actually be interacted with in the browser.
-    5. There has to be a better way to add event listeners to 16 cards at once, but I didn't get the loop I designed to work right.
+Problems:
+* Logic does not verify that a play is valid-- you can cheat!
+* Drawn cards cannot be played (see above)
+* There has to be a better way to add event listeners to 16 cards at once, but I didn't get the loop I designed to work right.
 
 Comments:
-Although I learned some valuable things, this game is not what I wanted it to be. I got bogged down in a few key places that took up an unreasonable amount of time. In the future I'd like to rewrite this to actually work, and have card images instead of numbers. But before this project, I had no concept of how all these pieces interact, and now I have a basic idea.
+Although I learned some valuable things, this game is not what I wanted it to be. I got bogged down in a few key places that took up an unreasonable amount of time. In the future I'd like to rewrite this to work better, and have card images instead of numbers. But before this project, I had no concept of how all these pieces interact, but now I have a basic idea.
 
 ### Citation:
 Based fisher yates shuffle function on code from:

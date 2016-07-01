@@ -87,9 +87,7 @@ function playCard(whosHand, index, domEl) {
   var card = whosHand.splice(index, 1, 'liza'); // splice returns arr of the card; 'liza' is a placeholder to retain the order
   topCard.unshift(card[0]);
   onTop.innerText = topCard[0].rank + topCard[0].suit // b/c of splice
-  console.log('TOPCARD: ', topCard);
   if (topCard[0].rank === '8') {
-    console.log('PROMPT!!!')
     var newSuit = prompt('Pick a new suit:').toUpperCase();
     onTop.innerText = `8${newSuit}`
   }
