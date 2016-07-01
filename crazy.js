@@ -83,10 +83,17 @@ function altTurn(array){
 
 function playCard(whosHand, index, domEl) {
   console.log("thing we'd like to remove: ", whosHand[index]);
-  var card = whosHand.splice(index, 1, 'liza'); // returns arr of the card 'liza' is a placeholder to retain the order
+
+  var card = whosHand.splice(index, 1, 'liza'); // splice returns arr of the card; 'liza' is a placeholder to retain the order
   topCard.unshift(card[0]);
-  onTop.innerText = topCard[0].rank + topCard[0].suit // b/c we used splice
-  // domEl.innerText = 'X'; // replace rank and suit with 'x'
+  onTop.innerText = topCard[0].rank + topCard[0].suit // b/c of splice
+  console.log('TOPCARD: ', topCard);
+  if (topCard[0].rank === '8') {
+    console.log('PROMPT!!!')
+    var newSuit = prompt('Pick a new suit:').toUpperCase();
+    onTop.innerText = `8${newSuit}`
+  }
+
   whosHand === redHand ? rh.removeChild(domEl) : bh.removeChild(domEl);
 
   if (rh.children.length === 0 || bh.children.length === 0) {
