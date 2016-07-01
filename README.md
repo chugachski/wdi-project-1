@@ -1,8 +1,10 @@
 # Games website
 
 ## Crazy 8's:
+
 ### Link
-github url
+https://chugachski.github.io/wdi-project-1/
+
 ### Gameplay:
 Crazy 8's is a popular kids card game. Gameplay (per Wikipedia) is as follows:
 
