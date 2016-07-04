@@ -56,7 +56,11 @@ h1 {
   font-size: 32px;
 }
 
-
+#deal {
+  height: 50px;
+  width: 125px;
+  font-size: 20px;
+}
 
 
 

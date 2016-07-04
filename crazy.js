@@ -34,7 +34,7 @@ redHand = [],
 shuffledDeck = [],
 discardPile = [],
 topCard = [],
-drawnCountRed = 0;
+drawnCountRed = 0,
 drawnCountBlue = 0;
 
 // Event listeners
