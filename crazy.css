@@ -31,12 +31,12 @@ div {
   margin-left: 200px;
 }
 
-#current-card {
+#top-card {
   background: lightgrey;
   margin-right: 200px;
 }
 
-#turn {
+#display-box {
   margin: 20px auto;
   background: lightgrey;
   width: 190px;
@@ -56,11 +56,8 @@ h1 {
   font-size: 32px;
 }
 
-#deal {
+#deal-hands {
   height: 50px;
   width: 125px;
   font-size: 20px;
 }
-
-
-

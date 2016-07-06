@@ -1,47 +1,26 @@
+console.log('crazy.js loaded');
 
-// Nodes
-var btn = document.querySelector('#deal');
-rh = document.querySelector('#r-side'),
-bh = document.querySelector('#b-side'),
-onTop = document.querySelector('#current-card'),
-dispTurn = document.querySelector('#turn'),
-faceDn = document.querySelector('#face-down'),
-rh0 = document.querySelector('#r-0'),
-rh1 = document.querySelector('#r-1'),
-rh2 = document.querySelector('#r-2'),
-rh3 = document.querySelector('#r-3'),
-rh4 = document.querySelector('#r-4'),
-rh5 = document.querySelector('#r-5'),
-rh6 = document.querySelector('#r-6'),
-rh7 = document.querySelector('#r-7'),
-rh8 = document.querySelector('#r-8'),
-bh0 = document.querySelector('#b-0'),
-bh1 = document.querySelector('#b-1'),
-bh2 = document.querySelector('#b-2'),
-bh3 = document.querySelector('#b-3'),
-bh4 = document.querySelector('#b-4'),
-bh5 = document.querySelector('#b-5'),
-bh6 = document.querySelector('#b-6'),
-bh7 = document.querySelector('#b-7'),
-bh8 = document.querySelector('#b-8'),
-draw = document.querySelector('#face-down')
+// create game vars
+var players = ['Red', 'Blue'],
+    turn = players[0],
+    redHand = [],
+    blueHand = [],
+    shuffledDeck = [],
+    topCard = [],
+    playedCards = [],
+    drawnCountRed = 0,
+    drawnCountBlue = 0;
 
-// Game vars
-participants = ['Red', 'Blue'],
-turn = 'Red',
-blueHand = [],
-redHand = [],
-shuffledDeck = [],
-topCard = [],
-drawnCountRed = 0,
-drawnCountBlue = 0;
+// dom elements
+var dealButton = document.querySelector('#deal-hands'),
+    rh = document.querySelector('#r-side'),
+    bh = document.querySelector('#b-side'),
+    onTop = document.querySelector('#top-card'),
+    display = document.querySelector('#display-box'),
+    draw = document.querySelector('#face-down');
 
-// Event listeners
-btn.addEventListener('click', function(){
-  startGame();
-});
 
-// Helper f'ns
+// helper f'ns
 function createDeck() {
   var ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
   var suits = ["C", "D", "H", "S"];
@@ -54,187 +33,178 @@ function createDeck() {
     }
   }
   return deck;
-}
+};
 
-function fisherYates(cardsArr) {
-  var i = cardsArr.length;
+function shuffleTheDeck(deck) {
+  var i = deck.length;
   if ( i === 0 ) return false;
   while ( --i ) {
      var j = Math.floor( Math.random() * ( i + 1 ) );
-     var tempi = cardsArr[i];
-     var tempj = cardsArr[j];
-     cardsArr[i] = tempj;
-     cardsArr[j] = tempi;
+     var tempi = deck[i];
+     var tempj = deck[j];
+     deck[i] = tempj;
+     deck[j] = tempi;
    }
-   return cardsArr;
-}
+   return deck;
+};
 
-function dealCard(array) {
-    var card = array.pop();
-    return card;
-  }
+function dealCard(shuffledDeck) {
+  var card = shuffledDeck.pop();
+  return card;
+};
 
-function altTurn(array){
-    array.push(array.shift());
-    this.turn = array[0];
-    return this.turn
-  }
-
-function playCard(whosHand, index, domEl) {
-  console.log("thing we'd like to remove: ", whosHand[index]);
-
-  var card = whosHand.splice(index, 1, 'liza'); // splice returns arr of the card; 'liza' is a placeholder to retain the order
-  topCard.unshift(card[0]);
-  onTop.innerText = topCard[0].rank + topCard[0].suit // b/c of splice
+function playCard(hand, index, domEl) {
+  var card = hand.splice(index, 1, 'liza'); // placeholder to retain order
+  topCard.unshift(card[0]); // splice returns an array
+  onTop.innerText = topCard[0].rank + topCard[0].suit;
   if (topCard[0].rank === '8') {
     var newSuit = prompt('Pick a new suit:').toUpperCase();
-    onTop.innerText = `8${newSuit}`
+    onTop.innerText = `8${newSuit}`;
   }
 
-  whosHand === redHand ? rh.removeChild(domEl) : bh.removeChild(domEl);
+  if (hand === redHand) {
+    var node = document.querySelector(`#${domEl}`);
+    rh.removeChild(node);
+  } else if (hand === blueHand) {
+    var blueNode = document.querySelector(`#${domEl}`);
+    bh.removeChild(blueNode);
+  }
 
   if (rh.children.length === 0 || bh.children.length === 0) {
     endGame(turn);
     return // stop execution
   }
 
-  altTurn(participants); // switch players
-  dispTurn.innerText = `${turn}, it\'s your turn!` // change displayed turn
-}
+  altTurn(players);
+  renderTurn(turn);
+};
 
-function drawCardRed() {
-  redHand.push(dealCard(shuffledDeck));
-  var newCard = document.createElement('div');
-  newCard.classList.add('r-hand');
-  newCard.id = `r-${8+drawnCountRed}`;
-  rh.appendChild(newCard);
-  newCard.innerText = redHand[8+drawnCountRed].rank + redHand[8+drawnCountRed].suit;
-  drawnCountRed += 1;
+function drawCard(hand) {
+  hand.push(dealCard(shuffledDeck)); // deal a card to proper hand
+  var newCard = document.createElement('div'); // create new div and...
 
-  altTurn(participants);
-  dispTurn.innerText = `${turn}, it\'s your turn!`;
-}
+  if (hand === redHand) { // add the proper classes
+    drawnCountRed += 1;
+    var clr = (7 + drawnCountRed).toString();
+    var idr = 'r-' + (7 + drawnCountRed).toString();
+    newCard.classList.add('r-hand');
+    newCard.classList.add(clr);
+    newCard.id = idr;
+    newCard.innerText = hand[hand.length - 1].rank + hand[hand.length - 1].suit;
+    var innerT = newCard.innerText;
+    rh.appendChild(newCard);
 
-function drawCardBlue() {
-  blueHand.push(dealCard(shuffledDeck));
-  var newCard = document.createElement('div');
-  newCard.classList.add('b-hand');
-  newCard.id = `b-${8+drawnCountBlue}`;
-  bh.appendChild(newCard);
-  newCard.innerText = blueHand[8+drawnCountBlue].rank + blueHand[8+drawnCountBlue].suit;
-  drawnCountBlue += 1;
+    newCard.addEventListener('click', function(event) {
+      console.log('EVENT:', event);
+      if (turn === 'Red') {
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+          playCard(redHand, clr, idr);
+        }
+      }
+    });
 
-  altTurn(participants);
-  dispTurn.innerText = `${turn}, it\'s your turn!`;
-}
+  } else if (hand === blueHand) {
+    drawnCountBlue += 1;
+    var clb = (7 + drawnCountBlue).toString();
+    var idb = 'b-' + (7 + drawnCountBlue).toString();
+    newCard.classList.add('b-hand');
+    newCard.classList.add(clb);
+    newCard.id = idb;
+    newCard.innerText = hand[hand.length - 1].rank + hand[hand.length - 1].suit;
+    bh.appendChild(newCard);
+
+    newCard.addEventListener('click', function(event) {
+      console.log('EVENT:', event);
+      if (turn === 'Blue') {
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+          playCard(blueHand, clb, idb);
+        }
+      }
+    });
+  }
+
+  altTurn(players);
+  renderTurn(turn);
+};
+
+function altTurn(array) {
+  array.push(array.shift());
+  turn = array[0];
+  return turn;
+};
 
 function endGame(winner) {
-  dispTurn.textContent = `${turn} is victorious!`;
+  display.textContent = `${turn} is victorious!`;
   console.log("GAME OVER");
-}
+};
 
-function gamePlay() {
-  console.log(`redHand: ${redHand.length}, blueHand: ${blueHand.length}, shuffledDeck: ${shuffledDeck.length} turn: ${turn} `);
+function applyListeners() {
+  for (var i=0; i<rh.children.length; i++) {
+    rh.children[i].addEventListener('click', function(event) {
+      var idx = event.srcElement.classList[1];
+      var domEl = event.srcElement.id;
+      var innerT = event.srcElement.innerText;
+      console.log('EVENT:', event);
 
-  // add event listeners to red cards
-  rh0.addEventListener('click', function() {
-    playCard(redHand, 0, rh0);
-  })
-
-  rh1.addEventListener('click', function() {
-    playCard(redHand, 1, rh1);
-  })
-
-  rh2.addEventListener('click', function() {
-    playCard(redHand, 2, rh2);
-  })
-
-  rh3.addEventListener('click', function() {
-    playCard(redHand, 3, rh3);
-  })
-
-  rh4.addEventListener('click', function() {
-    playCard(redHand, 4, rh4);
-  })
-
-  rh5.addEventListener('click', function() {
-    playCard(redHand, 5, rh5);
-  })
-
-  rh6.addEventListener('click', function() {
-    playCard(redHand, 6, rh6);
-  })
-
-  rh7.addEventListener('click', function() {
-    playCard(redHand, 7, rh7);
-  })
-
-// add event listeners to blue cards
-  bh0.addEventListener('click', function() {
-    playCard(blueHand, 0, bh0);
-  })
-
-  bh1.addEventListener('click', function() {
-    playCard(blueHand, 1, bh1);
-  })
-
-  bh2.addEventListener('click', function() {
-    playCard(blueHand, 2, bh2);
-  })
-
-  bh3.addEventListener('click', function() {
-    playCard(blueHand, 3, bh3);
-  })
-
-  bh4.addEventListener('click', function() {
-    playCard(blueHand, 4, bh4);
-  })
-
-  bh5.addEventListener('click', function() {
-    playCard(blueHand, 5, bh5);
-  })
-
-  bh6.addEventListener('click', function() {
-    playCard(blueHand, 6, bh6);
-  })
-
-  bh7.addEventListener('click', function() {
-    playCard(blueHand, 7, bh7);
-  })
-
-  draw.addEventListener('click', function() {
-    console.log('You clicked on draw');
-    if (turn === 'Red') {
-        drawCardRed();
-    } else if (turn === 'Blue') {
-        drawCardBlue();
-    }
-  })
-}
-
-// Starts the game off
-function startGame() { // preps the game board
-  shuffledDeck = fisherYates(createDeck()); // shuffle cards
-
-  for (var i=0; i<8; i++) { // deal cards and display
-    blueHand.push(dealCard(shuffledDeck));
-    redHand.push(dealCard(shuffledDeck));
+      if (turn === 'Red') {
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+          playCard(redHand, idx, domEl);
+        }
+      }
+    });
   }
-  console.log('redhand: ', redHand);
+
+  for (var i=0; i<bh.children.length; i++) {
+    bh.children[i].addEventListener('click', function(event) {
+      var idx = event.srcElement.classList[1];
+      var domEl = event.srcElement.id;
+      var innerT = event.srcElement.innerText;
+      console.log('EVENT:', event);
+
+      if (turn === 'Blue') {
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+          playCard(blueHand, idx, domEl);
+        }
+      }
+    });
+  }
+
+  draw.addEventListener('click', function(event) {
+    console.log('EVENT:', event);
+    if (turn === 'Red') {
+        drawCard(redHand);
+    } else if (turn === 'Blue') {
+        drawCard(blueHand);
+    }
+  });
+};
+
+function renderTurn(currentTurn) {
+  display.innerText = `${currentTurn}, it's your turn!`;
+};
+
+function startGame() { // sets up the game board
+  shuffledDeck = shuffleTheDeck(createDeck());
+
+  for (var i=0; i<8; i++) { // deal hands
+    redHand.push(dealCard(shuffledDeck));
+    blueHand.push(dealCard(shuffledDeck));
+  }
 
   for (var i=0; i<8; i++) { // add to DOM
     rh.children[i].innerText = redHand[i].rank + redHand[i].suit;
     bh.children[i].innerText = blueHand[i].rank + blueHand[i].suit;
   }
 
-  console.log("TOPCARD1: ", topCard);
-  console.log("IS ARR?", Array.isArray(topCard));
-  console.log("THING TO PUSH INTO TOPCARD: ", dealCard(shuffledDeck));
-  topCard.push(dealCard(shuffledDeck)); // deal a card into topCard array
-  console.log("TOPCARD2: ", topCard);
-  console.log("IS ARR?", Array.isArray(topCard));
-
+  topCard.push(dealCard(shuffledDeck)); // flip over top card
   onTop.innerText = topCard[0].rank + topCard[0].suit; // add to DOM
-  dispTurn.innerText = `${turn}, it\'s your turn!`
-  gamePlay();
-}
+
+  applyListeners(); // add event listeners to cards
+
+  renderTurn(turn); // start playing
+};
+
+// start the game
+dealButton.addEventListener('click', function(event) {
+  startGame();
+});
