@@ -32,7 +32,6 @@ turn = 'Red',
 blueHand = [],
 redHand = [],
 shuffledDeck = [],
-discardPile = [],
 topCard = [],
 drawnCountRed = 0,
 drawnCountBlue = 0;
