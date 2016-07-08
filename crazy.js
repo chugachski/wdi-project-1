@@ -7,7 +7,6 @@ var players = ['Red', 'Blue'],
     blueHand = [],
     shuffledDeck = [],
     topCard = [],
-    playedCards = [],
     drawnCountRed = 0,
     drawnCountBlue = 0;
 
@@ -18,6 +17,7 @@ var dealButton = document.querySelector('#deal-hands'),
     onTop = document.querySelector('#top-card'),
     display = document.querySelector('#display-box'),
     draw = document.querySelector('#face-down');
+
 
 
 // helper f'ns
@@ -54,12 +54,16 @@ function dealCard(shuffledDeck) {
 };
 
 function playCard(hand, index, domEl) {
+  console.log('PLAYED CARDS', topCard);
   var card = hand.splice(index, 1, 'liza'); // placeholder to retain order
   topCard.unshift(card[0]); // splice returns an array
   onTop.innerText = topCard[0].rank + topCard[0].suit;
   if (topCard[0].rank === '8') {
     var newSuit = prompt('Pick a new suit:').toUpperCase();
-    onTop.innerText = `8${newSuit}`;
+    onTop.innerText = `8${newSuit}`; // updates text but can't play new suit
+    topCard[0].suit = newSuit; // now can play new suit
+    console.log('PLAYED CARDS:', topCard);
+    console.log('HAND:', hand);
   }
 
   if (hand === redHand) {
@@ -97,7 +101,7 @@ function drawCard(hand) {
     newCard.addEventListener('click', function(event) {
       console.log('EVENT:', event);
       if (turn === 'Red') {
-        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit) || innerT.includes(8)) {
           playCard(redHand, clr, idr);
         }
       }
@@ -147,7 +151,7 @@ function applyListeners() {
       console.log('EVENT:', event);
 
       if (turn === 'Red') {
-        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit) || innerT.includes(8)) {
           playCard(redHand, idx, domEl);
         }
       }
@@ -162,7 +166,7 @@ function applyListeners() {
       console.log('EVENT:', event);
 
       if (turn === 'Blue') {
-        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit)){
+        if (innerT.includes(topCard[0].rank) || innerT.includes(topCard[0].suit) || innerT.includes(8)) {
           playCard(blueHand, idx, domEl);
         }
       }

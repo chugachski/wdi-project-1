@@ -9,11 +9,11 @@ section {
 }
 
 div {
-  width: 90px;
-  height: 160px;
+  width: 100px;
+  height: 145px;
   margin: 5px;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 5px;
+  padding: 0;
 }
 
 .b-hand {
@@ -61,3 +61,5 @@ h1 {
   width: 125px;
   font-size: 20px;
 }
+
+
